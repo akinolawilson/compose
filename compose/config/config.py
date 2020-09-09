@@ -1017,6 +1017,7 @@ def merge_service_dicts(base, override, version):
     md.merge_sequence('configs', types.ServiceConfig.parse)
     md.merge_sequence('security_opt', types.SecurityOpt.parse)
     md.merge_mapping('extra_hosts', parse_extra_hosts)
+    md.merge_sequence('device_requests', types.ResourceRequest.parse)
 
     md.merge_field('networks', merge_networks, default={})
     for field in ['volumes', 'devices']:

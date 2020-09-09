@@ -456,6 +456,43 @@ class GenericResource(namedtuple('_GenericResource', 'kind value')):
         return self.kind
 
 
+class ResourceRequest(namedtuple('_ResourceRequest', 'driver count deviceIDs capabilities options')):
+    @classmethod
+    def parse(cls, dct):
+        capabilities = None
+        if 'capabilities' in dct:
+            capabilities = dct['capabilities']
+        driver = None
+        if 'driver' in dct:
+            driver = dct['driver']
+        count = None
+        if 'count' in dct:
+            count = dct['count']
+        deviceIDs = None
+        if 'deviceIDs' in dct:
+            deviceIDs = dct['deviceIDs']
+        options = None
+        if 'options' in dct:
+            options = dct['options']
+        
+        return cls(
+            driver,
+            count,
+            deviceIDs,
+            capabilities,
+            options
+        )
+
+    def repr(self):
+        return {
+            k: v for k, v in zip(self._fields, self) if v is not None
+        }
+
+    @property
+    def merge_field(self):
+        return self.driver
+
+
 def normalize_port_dict(port):
     return '{external_ip}{has_ext_ip}{published}{is_pub}{target}/{protocol}'.format(
         published=port.get('published', ''),
